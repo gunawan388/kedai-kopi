@@ -1,55 +1,164 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jargon - Top Up Higgs Domino Island</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+    header {
+        background: linear-gradient(90deg, #001f3f, #00d084);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+    }
+    header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+    }
+    header p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+    .btn {
+        background: #00d084;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .section {
+        padding: 50px 20px;
+        max-width: 1000px;
+        margin: auto;
+    }
+    .features {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .feature-box {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+        flex: 1 1 calc(33% - 40px);
+        text-align: center;
+    }
+    .feature-box h3 {
+        color: #001f3f;
+    }
+    .testimonials {
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+        scroll-snap-type: x mandatory;
+    }
+    .testimonial {
+        flex: 0 0 300px;
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        scroll-snap-align: start;
+    }
+    footer {
+        background: #001f3f;
+        color: white;
+        text-align: center;
+        padding: 20px;
+    }
+    /* Notifikasi Pop-up */
+    .popup {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.9rem;
+        animation: slideIn 0.5s ease-in-out;
+    }
+    @keyframes slideIn {
+        from {opacity: 0; transform: translateX(-50px);}
+        to {opacity: 1; transform: translateX(0);}
+    }
+</style>
+</head>
+<body>
 
-export default function LandingPage() { const testimonials = [ "Aplikasi ini luar biasa! Produktivitas saya meningkat pesat.", "Sangat mudah digunakan dan aman untuk data saya.", "Tim dukungan yang cepat dan responsif, saya sangat puas.", "Fitur-fiturnya benar-benar membantu bisnis saya berkembang." ];
+<header>
+    <h1>Jargon</h1>
+    <p>Solusi Cepat Top Up Higgs Domino Island</p>
+    <button class="btn">Hubungi Kami</button>
+</header>
 
-const [currentIndex, setCurrentIndex] = useState(0);
-
-useEffect(() => { const interval = setInterval(() => { setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length); }, 3000); return () => clearInterval(interval); }, []);
-
-return ( <div className="min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col"> {/* Navbar */} <nav className="flex justify-between items-center p-6 bg-white shadow-md"> <h1 className="text-2xl font-bold text-blue-600">AppPromo</h1> <div className="space-x-6"> <a href="#features" className="text-gray-700 hover:text-blue-600">Fitur</a> <a href="#about" className="text-gray-700 hover:text-blue-600">Tentang</a> <a href="#testimonials" className="text-gray-700 hover:text-blue-600">Testimoni</a> <a href="#contact" className="text-gray-700 hover:text-blue-600">Kontak</a> </div> </nav>
-
-{/* Hero Section */}
-  <section className="flex flex-col md:flex-row items-center justify-between flex-1 px-8 md:px-20 py-16">
-    <div className="md:w-1/2 space-y-6">
-      <h2 className="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
-        Aplikasi <span className="text-blue-600">Inovatif</span> untuk Bisnis Modern
-      </h2>
-      <p className="text-lg text-gray-600">
-        Kelola bisnis Anda dengan mudah, cepat, dan aman melalui aplikasi kami. Dapatkan solusi lengkap untuk meningkatkan efisiensi dan keuntungan.
-      </p>
-      <div className="space-x-4">
-        <button className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">Unduh Sekarang</button>
-        <button className="px-6 py-3 border border-blue-600 text-blue-600 rounded-full hover:bg-blue-50 transition">Lihat Demo</button>
-      </div>
-    </div>
-    <div className="md:w-1/2 mt-10 md:mt-0">
-      <img src="https://via.placeholder.com/500x350" alt="Aplikasi" className="rounded-xl shadow-lg" />
-    </div>
-  </section>
-
-  {/* Features Section */}
-  <section id="features" className="py-16 bg-gray-50">
-    <div className="max-w-6xl mx-auto px-8 grid md:grid-cols-3 gap-10">
-      {["Integrasi Mudah", "Keamanan Tinggi", "Dukungan 24/7"].map((title, index) => (
-        <div key={index} className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-          <h3 className="text-xl font-semibold text-blue-600 mb-4">{title}</h3>
-          <p className="text-gray-600">Nikmati {title.toLowerCase()} yang dirancang khusus untuk mendukung kebutuhan bisnis Anda.</p>
+<section class="section">
+    <h2 style="text-align:center;">Fitur Unggulan</h2>
+    <div class="features">
+        <div class="feature-box">
+            <h3>Transaksi 24/7</h3>
+            <p>Layanan online tanpa henti, kapan pun Anda butuh.</p>
         </div>
-      ))}
+        <div class="feature-box">
+            <h3>Proses Instan</h3>
+            <p>Top up cepat, langsung masuk ke akun Anda.</p>
+        </div>
+        <div class="feature-box">
+            <h3>Harga Terbaik</h3>
+            <p>Penawaran kompetitif untuk setiap pembelian.</p>
+        </div>
     </div>
-  </section>
+</section>
 
-  {/* Testimonials Section */}
-  <section id="testimonials" className="py-16 bg-white text-center">
-    <h3 className="text-2xl font-bold text-gray-800 mb-8">Apa Kata Pelanggan Kami</h3>
-    <p className="text-lg text-blue-600 transition duration-500 ease-in-out">{testimonials[currentIndex]}</p>
-  </section>
+<section class="section">
+    <h2 style="text-align:center;">Apa Kata Mitra Kami</h2>
+    <div class="testimonials">
+        <div class="testimonial">"Aplikasi Jargon terbaik, cepat dan terpercaya!" - Andi</div>
+        <div class="testimonial">"Pelayanan ramah dan proses instan." - Siti</div>
+        <div class="testimonial">"Harga bersaing, saya puas!" - Budi</div>
+        <div class="testimonial">"Transaksi aman 24 jam." - Rina</div>
+        <div class="testimonial">"Rekomendasi untuk semua pemain Higgs Domino." - Tono</div>
+    </div>
+</section>
 
-  {/* Footer */}
-  <footer className="bg-white py-6 text-center text-gray-500 text-sm border-t">
-    © {new Date().getFullYear()} AppPromo. Semua Hak Dilindungi.
-  </footer>
-</div>
+<footer>
+    <p>© 2025 Jargon. All rights reserved.</p>
+</footer>
 
-); }
+<!-- Notifikasi Otomatis -->
+<div id="popup-container"></div>
 
+<script>
+const pelanggan = [
+    "Andi baru saja top up 200M koin.",
+    "Siti berhasil membeli 1B koin.",
+    "Budi melakukan top up 500M koin.",
+    "Rina baru saja membeli 300M koin.",
+    "Tono sukses melakukan pembelian 2B koin."
+];
+
+let index = 0;
+function showPopup() {
+    const container = document.getElementById('popup-container');
+    container.innerHTML = `<div class="popup">${pelanggan[index]}</div>`;
+    index = (index + 1) % pelanggan.length;
+    setTimeout(() => { container.innerHTML = ""; }, 3000);
+}
+setInterval(showPopup, 5000);
+</script>
+
+</body>
+</html>
