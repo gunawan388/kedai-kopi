@@ -1,105 +1,106 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jargon - Top Up Higgs Domino Island</title>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jargon - Top Up Higgs Domino</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
 
-    body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #000000;
-  background-image: url('images/argyle.png');
-  background-repeat: repeat;
-  background-size: auto;
-  color: #fff;
-}
-    header {
-        background: linear-gradient(90deg, #001f3f, #00d084);
-        color: white;
-        padding: 60px 20px;
-        text-align: center;
-    }
-    header h1 {
-        font-size: 3rem;
-        margin-bottom: 10px;
-    }
-    header p {
-        font-size: 1.2rem;
-        margin-bottom: 20px;
-    }
-    .btn {
-        background: #00d084;
-        color: white;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        font-size: 1rem;
-    }
-    .section {
-        padding: 50px 20px;
-        max-width: 1000px;
-        margin: auto;
-    }
-    .features {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-    }
-    .feature-box {
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        padding: 20px;
-        flex: 1 1 calc(33% - 40px);
-        text-align: center;
-    }
-    .feature-box h3 {
-        color: #001f3f;
-    }
-    .testimonials {
-        display: flex;
-        overflow-x: auto;
-        gap: 20px;
-        scroll-snap-type: x mandatory;
-    }
-    .testimonial {
-        flex: 0 0 300px;
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        scroll-snap-align: start;
-    }
-    footer {
-        background: #001f3f;
-        color: white;
-        text-align: center;
-        padding: 20px;
-    }
-    /* Notifikasi Pop-up */
-    .popup {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        padding: 10px 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.9rem;
-        animation: slideIn 0.5s ease-in-out;
-    }
-    @keyframes slideIn {
-        from {opacity: 0; transform: translateX(-50px);}
-        to {opacity: 1; transform: translateX(0);}
-    }
-</style>
+        header {
+            background: #001f3f;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background: #00d084;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .section {
+            padding: 40px 20px;
+        }
+
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .feature-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            flex: 1 1 calc(33% - 40px);
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .feature-box h3 {
+            color: #001f3f;
+        }
+
+        .testimonials {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .testimonial {
+            flex: 0 0 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            scroll-snap-align: start;
+        }
+
+        footer {
+            background: #001f3f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Notifikasi Pop-up */
+        .popup {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            color: #001f3f;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            animation: slideIn 0.5s ease-in-out;
+            z-index: 9999;
+        }
+
+        @keyframes slideIn {
+            from {opacity: 0; transform: translateX(-50px);}
+            to {opacity: 1; transform: translateX(0);}
+        }
+    </style>
 </head>
 <body>
 
@@ -155,23 +156,24 @@
 <div id="popup-container"></div>
 
 <script>
-const pelanggan = [
-    "Anxx baru saja top up 200M koin.",
-    "Sixx berhasil membeli 1B koin.",
-    "Buxx melakukan top up 500M koin.",
-    "Rixxx baru saja membeli 300M koin.",
-    "Tonxx sukses melakukan pembelian 2B koin."
-];
+    const pelanggan = [
+        "Anxx baru saja top up 200M koin.",
+        "Sixx berhasil membeli 1B koin.",
+        "Buxx melakukan top up 500M koin.",
+        "Rixxx baru saja membeli 300M koin.",
+        "Tonxx sukses melakukan pembelian 2B koin."
+    ];
 
-let index = 0;
-function showPopup() {
-    const container = document.getElementById('popup-container');
-    container.innerHTML = `<div class="popup">${pelanggan[index]}</div>`;
-    index = (index + 1) % pelanggan.length;
-    setTimeout(() => { container.innerHTML = ""; }, 3000);
-}
-setInterval(showPopup, 5000);
+    let index = 0;
+    function showPopup() {
+        const container = document.getElementById('popup-container');
+        container.innerHTML = `<div class="popup">${pelanggan[index]}</div>`;
+        index = (index + 1) % pelanggan.length;
+        setTimeout(() => { container.innerHTML = ""; }, 3000);
+    }
+    setInterval(showPopup, 5000);
 </script>
 
 </body>
-</html>
+</html>ls
+
