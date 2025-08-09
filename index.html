@@ -1,204 +1,195 @@
-    print("==== SELAMAT DATANG ====")
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jargon - Top Up Higgs Domino</title>
-    <style>
-        body {
-            body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1d0d5e;
-    background-image: url('http://www.transparenttextures.com/patterns/asfalt-dark.png');
-    background-repeat: repeat;
-    background-size: auto;
-}
-        }
-
-        header {
-            background: #001f3f;
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .btn {
-            background: #00d084;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .section {
-            padding: 40px 20px;
-        }
-
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .feature-box {
-            background: rgba(255, 255, 255, 0.9); /* semi transparan */
-             /* ... */
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            flex: 1 1 calc(33% - 40px);
-            text-align: center;
-            min-width: 250px;
-        }
-
-        .feature-box h3 {
-            color: #001f3f;
-        }
-
-        .testimonials {
-            display: flex;
-            overflow-x: auto;
-            gap: 20px;
-            scroll-snap-type: x mandatory;
-        }
-
-        .testimonial {
-            background: rgba(255, 255, 255, 0.9);
-            /* ... */
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            scroll-snap-align: start;
-        }
-
-        footer {
-            background: #001f3f;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Notifikasi Pop-up */
-        .popup {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: white;
-            color: #001f3f;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            animation: slideIn 0.5s ease-in-out;
-            z-index: 9999;
-        }
-
-        @keyframes slideIn {
-            from {opacity: 0; transform: translateX(-50px);}
-            to {opacity: 1; transform: translateX(0);}
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>Jargon</h1>
-    <p>Solusi Cepat Top Up Higgs Domino Island</p>
-    <button class="btn">Hubungi Kami</button>
-</header>
-
-<section class="section">
-    <h2 style="text-align:center;">Fitur Unggulan</h2>
-    <div class="features">
-        <div class="feature-box navy">
-            <h3>Transaksi 24/7</h3>
-            <p>Layanan online tanpa henti, kapan pun Anda butuh.</p>
-        </div>
-        <div class="feature-box navy">
-            <h3>Proses Instan</h3>
-            <p>Top up cepat, langsung masuk ke akun Anda.</p>
-        </div>
-        <div class="feature-box navy">
-            <h3>Harga Terbaik</h3>
-            <p>Harga bersaing untuk semua kebutuhan Anda.</p>
-        </div>
-        <div class="feature-box navy">
-            <h3>Dukungan Pelanggan</h3>
-            <p>Tim support siap membantu Anda kapan saja.</p>
-        </div>
-        <div class="feature-box">
-            <h3>Pembayaran Aman</h3>
-            <p>Transaksi dijamin aman dengan sistem enkripsi terbaru.</p>
-        </div>
-    </div>
-    <p style="text-align:center; margin-top: 20px;">Penawaran kompetitif untuk setiap pembelian.</p>
-</section>
-
-<section class="section">
-    <h2 style="text-align:center;">Apa Kata Mitra Kami</h2>
-    <div class="testimonials">
-        <div class="testimonial">"Aplikasi Jargon terbaik, cepat dan terpercaya!" - Andi</div>
-        <div class="testimonial">"Pelayanan ramah dan proses instan." - Siti</div>
-        <div class="testimonial">"Harga bersaing, saya puas!" - Budi</div>
-        <div class="testimonial">"Transaksi aman 24 jam." - Rina</div>
-        <div class="testimonial">"Rekomendasi untuk semua pemain Higgs Domino." - Tono</div>
-    </div>
-</section>
-
-<footer>
-    <p>© 2025 Jargon. All rights reserved.</p>
-</footer>
-
-<!-- Notifikasi Otomatis -->
-<div id="popup-container"></div>
-
-<script>
-    const pelanggan = [
-        "Anxx baru saja top up 200M koin.",
-        "Sixx berhasil membeli 1B koin.",
-        "Buxx melakukan top up 500M koin.",
-        "Rixxx baru saja membeli 300M koin.",
-        "Tonxx sukses melakukan pembelian 2B koin."
-    ];
-
-    let index = 0;
-    function showPopup() {
-        const container = document.getElementById('popup-container');
-        container.innerHTML = `<div class="popup">${pelanggan[index]}</div>`;
-        index = (index + 1) % pelanggan.length;
-        setTimeout(() => { container.innerHTML = ""; }, 3000);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing Page Agen Pulsa</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
     }
-    setInterval(showPopup, 5000);
-</script>
 
-</body>
-</html>ls
+    /* HEADER VIDEO */
+    header {
+      position: relative;
+      height: 60vh;
+      background: linear-gradient(to right, #007BFF, #00C6FF);
+      overflow: hidden;
+    }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Judul Halaman</title>
-    <style>
-        .feature-box.navy {
-            background-color: navy;
-            color: white;
-        }
-    </style>
+    header video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+
+    header .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      text-align: center;
+    }
+
+    header .overlay h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    header .overlay button {
+      padding: 10px 20px;
+      background: #FFD700;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    /* FITUR */
+    section {
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .feature-box {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      width: 250px;
+    }
+
+    /* TESTIMONI */
+    .testimoni {
+      background: #f8f9fa;
+      padding: 50px 20px;
+    }
+
+    .slider {
+      max-width: 500px;
+      margin: auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slides {
+      display: flex;
+      animation: slide 15s infinite;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    .slide p {
+      font-style: italic;
+      font-size: 1.2rem;
+    }
+
+    .slide h4 {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #007BFF;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0%); }
+      20% { transform: translateX(0%); }
+      25% { transform: translateX(-100%); }
+      45% { transform: translateX(-100%); }
+      50% { transform: translateX(-200%); }
+      70% { transform: translateX(-200%); }
+      75% { transform: translateX(-300%); }
+      95% { transform: translateX(-300%); }
+      100% { transform: translateX(-400%); }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- isi halaman di sini -->
+  <!-- HEADER VIDEO -->
+  <header>
+    <video autoplay muted loop>
+      <source src="video-promo.mp4" type="video/mp4">
+      Browser Anda tidak mendukung video.
+    </video>
+    <div class="overlay">
+      <h1>Promo Agen Pulsa Terbaik</h1>
+      <button>Daftar Sekarang</button>
+    </div>
+  </header>
+
+  <!-- FITUR -->
+  <section>
+    <h2>Fitur Transaksi</h2>
+    <div class="features">
+      <div class="feature-box">Isi Pulsa Semua Operator</div>
+      <div class="feature-box">Token Listrik</div>
+      <div class="feature-box">Paket Data</div>
+      <div class="feature-box">Voucher Game</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fitur Pelayanan</h2>
+    <div class="features">
+      <div class="feature-box">Layanan 24 Jam</div>
+      <div class="feature-box">Respon Cepat</div>
+      <div class="feature-box">Harga Kompetitif</div>
+      <div class="feature-box">Aman & Terpercaya</div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI -->
+  <div class="testimoni">
+    <h2>Kata Mitra Kami</h2>
+    <div class="slider">
+      <div class="slides">
+        <div class="slide">
+          <p>"Aplikasi jargon mudah digunakan"</p>
+          <h4>Andi</h4>
+        </div>
+        <div class="slide">
+          <p>"Pelayanan cepat dan ramah"</p>
+          <h4>Rina</h4>
+        </div>
+        <div class="slide">
+          <p>"Transaksi lancar tanpa hambatan"</p>
+          <h4>Budi</h4>
+        </div>
+        <div class="slide">
+          <p>"Harga bersaing dan terpercaya"</p>
+          <h4>Siti</h4>
+        </div>
+        <div class="slide">
+          <p>"Bisa transaksi kapan saja, 24 jam"</p>
+          <h4>Joko</h4>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
