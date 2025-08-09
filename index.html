@@ -1,212 +1,152 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Landing Page Agen Pulsa</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-    header {
-  position: relative;
-  height: 60vh;
-  background: linear-gradient(-45deg, #007BFF, #00C6FF, #FF6B6B, #FFD93D);
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-  overflow: hidden;
-}
+// Marketplace Pulsa - Single-file React app (Vite + Tailwind) // ---------------------------------------------------------------- // How to use // 1. Create a new Vite React project: npm create vite@latest pulsa-marketplace -- --template react // 2. cd pulsa-marketplace // 3. Install dependencies: npm install and Tailwind + lucide-react //    - npm install lucide-react //    - follow Tailwind setup: https://tailwindcss.com/docs/guides/vite // 4. Replace src/App.jsx with the content below and run npm run dev. // 5. This demo stores cart & products in localStorage and simulates checkout. // ----------------------------------------------------------------
 
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+import React, { useEffect, useMemo, useState } from "react"; import { ShoppingCart, Search, PlusCircle, Trash2 } from "lucide-react";
 
-    header video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-    }
+// Mock data (pulsa products) const initialProducts = [ { id: "TELKOMSEL-5K", provider: "Telkomsel", denom: 5000, price: 6000, stock: 100 }, { id: "TELKOMSEL-10K", provider: "Telkomsel", denom: 10000, price: 11000, stock: 200 }, { id: "XL-5K", provider: "XL", denom: 5000, price: 5800, stock: 80 }, { id: "IM3-10K", provider: "Indosat", denom: 10000, price: 10750, stock: 60 }, { id: "TRI-20K", provider: "Tri", denom: 20000, price: 20500, stock: 40 }, { id: "PLN-TOKEN-20K", provider: "PLN", denom: 20000, price: 21000, stock: 30, isToken: true }, ];
 
-    header .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: white;
-      text-align: center;
-    header .overlay h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  overflow: hidden;
-  white-space: nowrap;
-  border-right: 3px solid white;
-  width: 0;
-  animation: typing 4s steps(30, end) forwards, blink 0.7s step-end infinite;
-}
+function currencyIDR(n) { return n.toLocaleString("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }); }
 
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
-}
+function useLocalStorage(key, initial) { const [state, setState] = useState(() => { try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : initial; } catch (e) { return initial; } }); useEffect(() => { localStorage.setItem(key, JSON.stringify(state)); }, [key, state]); return [state, setState]; }
 
-@keyframes blink {
-  50% { border-color: transparent }
-}
+export default function App() { const [products, setProducts] = useLocalStorage("pm_products", initialProducts); const [query, setQuery] = useState(""); const [providerFilter, setProviderFilter] = useState("All"); const [cart, setCart] = useLocalStorage("pm_cart", []); const [phoneNumber, setPhoneNumber] = useState(""); const [isAdminMode, setIsAdminMode] = useState(false); const [showCheckout, setShowCheckout] = useState(false);
 
-    header .overlay button {
-      padding: 10px 20px;
-      background: #FFD700;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-    }
+useEffect(() => { // ensure product IDs unique if (!products || products.length === 0) setProducts(initialProducts); }, []);
 
-    /* FITUR */
-    section {
-      padding: 50px 20px;
-      text-align: center;
-    }
+const providers = useMemo(() => ["All", ...Array.from(new Set(products.map(p => p.provider)))] , [products]);
 
-    .features {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 30px;
-    }
+function filtered() { return products.filter(p => { const matchesQuery = query.trim() === "" || p.provider.toLowerCase().includes(query.toLowerCase()) || p.id.toLowerCase().includes(query.toLowerCase()) || String(p.denom).includes(query); const matchesProvider = providerFilter === "All" || p.provider === providerFilter; return matchesQuery && matchesProvider; }); }
 
-    .feature-box {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 20px;
-      width: 250px;
-    }
+function addToCart(product, qty = 1) { setCart(prev => { const found = prev.find(i => i.id === product.id); if (found) { return prev.map(i => i.id === product.id ? { ...i, qty: i.qty + qty } : i); } return [...prev, { ...product, qty }]; }); }
 
-    /* TESTIMONI */
-    .testimoni {
-      background: #f8f9fa;
-      padding: 50px 20px;
-    }
+function removeFromCart(productId) { setCart(prev => prev.filter(i => i.id !== productId)); }
 
-    .slider {
-      max-width: 500px;
-      margin: auto;
-      overflow: hidden;
-      position: relative;
-    }
+function updateQty(productId, qty) { setCart(prev => prev.map(i => i.id === productId ? { ...i, qty: Math.max(1, qty) } : i)); }
 
-    .slides {
-      display: flex;
-      animation: slide 15s infinite;
-    }
+function clearCart() { setCart([]); }
 
-    .slide {
-      min-width: 100%;
-      box-sizing: border-box;
-      padding: 20px;
-    }
+function handleCheckout() { if (!phoneNumber.match(/^08[1-9][0-9]{6,10}$/)) { alert("Masukkan nomor tujuan yang valid (contoh: 081234567890)"); return; } // simulate processing: deduct stock setProducts(prev => prev.map(p => { const c = cart.find(x => x.id === p.id); if (!c) return p; return { ...p, stock: Math.max(0, p.stock - c.qty) }; })); // create a simple order record in localStorage const orders = JSON.parse(localStorage.getItem("pm_orders") || "[]"); const total = cart.reduce((s, i) => s + i.price * i.qty, 0); const order = { id: ORD-${Date.now()}, phone: phoneNumber, items: cart, total, date: new Date().toISOString() }; localStorage.setItem("pm_orders", JSON.stringify([order, ...orders])); clearCart(); setShowCheckout(false); alert(Pembelian berhasil. Order ID: ${order.id}); }
 
-    .slide p {
-      font-style: italic;
-      font-size: 1.2rem;
-    }
+function adminAddProduct(newProduct) { setProducts(prev => [newProduct, ...prev]); }
 
-    .slide h4 {
-      margin-top: 10px;
-      font-weight: bold;
-      color: #007BFF;
-    }
+function adminDeleteProduct(id) { if (!confirm("Hapus produk ini?")) return; setProducts(prev => prev.filter(p => p.id !== id)); }
 
-    @keyframes slide {
-      0% { transform: translateX(0%); }
-      20% { transform: translateX(0%); }
-      25% { transform: translateX(-100%); }
-      45% { transform: translateX(-100%); }
-      50% { transform: translateX(-200%); }
-      70% { transform: translateX(-200%); }
-      75% { transform: translateX(-300%); }
-      95% { transform: translateX(-300%); }
-      100% { transform: translateX(-400%); }
-    }
-  </style>
-</head>
-<body>
+const cartTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-  <!-- HEADER VIDEO -->
-  <header>
-    <video autoplay muted loop>
-      <source src="video-promo.mp4" type="video/mp4">
-      Browser Anda tidak mendukung video.
-    </video>
-    <div class="overlay">
-      <h1>Promo Agen Pulsa Terbaik</h1>
-      <button>Daftar Sekarang</button>
-    </div>
-  </header>
+return ( <div className="min-h-screen bg-slate-50 text-slate-900"> <header className="bg-white shadow-sm sticky top-0 z-40"> <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between"> <div className="flex items-center gap-3"> <div className="text-2xl font-extrabold">PulsaPro</div> <div className="text-sm text-slate-500">Marketplace Pulsa & Token - Profesional</div> </div> <div className="flex items-center gap-3"> <div className="relative"> <input value={query} onChange={e => setQuery(e.target.value)} className="pl-10 pr-3 py-2 rounded-lg border w-80" placeholder="Cari provider, denom, atau ID produk" /> <Search className="absolute left-3 top-2.5 text-slate-400" size={18} /> </div> <select value={providerFilter} onChange={e => setProviderFilter(e.target.value)} className="py-2 px-3 rounded-lg border"> {providers.map(p => <option key={p} value={p}>{p}</option>)} </select> <button onClick={() => setIsAdminMode(m => !m)} className="py-2 px-3 rounded-lg border">{isAdminMode ? 'User Mode' : 'Admin'}</button> <button onClick={() => setShowCheckout(true)} className="flex items-center gap-2 bg-indigo-600 text-white px-3 py-2 rounded-lg"> <ShoppingCart size={16} /> Cart ({cart.length}) </button> </div> </div> </header>
 
-  <!-- FITUR -->
-  <section>
-    <h2>Fitur Transaksi</h2>
-    <div class="features">
-      <div class="feature-box">Isi Pulsa Semua Operator</div>
-      <div class="feature-box">Token Listrik</div>
-      <div class="feature-box">Paket Data</div>
-      <div class="feature-box">Voucher Game</div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Fitur Pelayanan</h2>
-    <div class="features">
-      <div class="feature-box">Layanan 24 Jam</div>
-      <div class="feature-box">Respon Cepat</div>
-      <div class="feature-box">Harga Kompetitif</div>
-      <div class="feature-box">Aman & Terpercaya</div>
-    </div>
-  </section>
-
-  <!-- TESTIMONI -->
-  <div class="testimoni">
-    <h2>Kata Mitra Kami</h2>
-    <div class="slider">
-      <div class="slides">
-        <div class="slide">
-          <p>"Aplikasi jargon mudah digunakan"</p>
-          <h4>Andi</h4>
+<main className="max-w-6xl mx-auto px-4 py-6">
+    <section className="grid md:grid-cols-4 gap-6">
+      <div className="md:col-span-3">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold">Produk Terbaru</h2>
+          <div className="text-sm text-slate-600">{filtered().length} produk ditemukan</div>
         </div>
-        <div class="slide">
-          <p>"Pelayanan cepat dan ramah"</p>
-          <h4>Rina</h4>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered().map(p => (
+            <div key={p.id} className="bg-white p-4 rounded-2xl shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="font-bold">{p.provider}</div>
+                  <div className="text-sm text-slate-500">Stock: {p.stock}</div>
+                </div>
+                <div className="text-2xl font-extrabold">{p.denom} {p.isToken ? 'Token' : 'Pulsa'}</div>
+                <div className="text-lg mt-2">{currencyIDR(p.price)}</div>
+                <div className="text-xs text-slate-500 mt-1">ID: {p.id}</div>
+              </div>
+
+              <div className="mt-4 flex items-center gap-2">
+                <button onClick={() => addToCart(p, 1)} className="flex-1 py-2 rounded-lg bg-emerald-600 text-white font-semibold">Beli</button>
+                {isAdminMode ? (
+                  <button onClick={() => adminDeleteProduct(p.id)} className="py-2 px-3 rounded-lg border flex items-center gap-2"><Trash2 size={16} />Hapus</button>
+                ) : (
+                  <button onClick={() => addToCart(p, 5)} className="py-2 px-3 rounded-lg border flex items-center gap-2"><PlusCircle size={16} />+5</button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-        <div class="slide">
-          <p>"Transaksi lancar tanpa hambatan"</p>
-          <h4>Budi</h4>
+      </div>
+
+      <aside className="bg-white p-4 rounded-2xl shadow-sm">
+        <h3 className="font-semibold mb-2">Keranjang</h3>
+        {cart.length === 0 ? (
+          <div className="text-sm text-slate-500">Keranjang kosong</div>
+        ) : (
+          <div className="space-y-3">
+            {cart.map(i => (
+              <div key={i.id} className="flex items-center justify-between">
+                <div>
+                  <div className="font-semibold">{i.provider} - {i.denom}</div>
+                  <div className="text-xs text-slate-500">{currencyIDR(i.price)} x {i.qty}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input value={i.qty} onChange={e => updateQty(i.id, parseInt(e.target.value || '1'))} className="w-16 text-center rounded-lg border py-1" type="number" />
+                  <button onClick={() => removeFromCart(i.id)} className="py-1 px-2 rounded-lg border">Hapus</button>
+                </div>
+              </div>
+            ))}
+
+            <div className="pt-2 border-t mt-2">
+              <div className="flex items-center justify-between font-semibold">Total <div>{currencyIDR(cartTotal)}</div></div>
+              <div className="mt-3 flex gap-2">
+                <button onClick={() => setShowCheckout(true)} className="flex-1 py-2 rounded-lg bg-indigo-600 text-white">Checkout</button>
+                <button onClick={() => clearCart()} className="py-2 px-3 rounded-lg border">Kosongkan</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-4 text-xs text-slate-500">Catatan: Ini demo lokal. Integrasikan gateway pembayaran dan API provider pulsa pada server untuk produksi.</div>
+      </aside>
+    </section>
+
+    {isAdminMode && (
+      <section className="mt-6 bg-white p-4 rounded-2xl shadow-sm">
+        <h3 className="font-semibold mb-3">Admin - Tambah Produk</h3>
+        <AdminForm onAdd={adminAddProduct} />
+      </section>
+    )}
+
+    <section className="mt-6">
+      <h3 className="font-semibold mb-2">Riwayat Pesanan (lokal)</h3>
+      <OrderList />
+    </section>
+  </main>
+
+  {showCheckout && (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-xl w-full max-w-md">
+        <h3 className="font-semibold text-lg">Checkout</h3>
+        <div className="mt-3">
+          <label className="text-sm">Nomor Tujuan</label>
+          <input value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} className="w-full mt-1 py-2 px-3 rounded-lg border" placeholder="081234567890" />
         </div>
-        <div class="slide">
-          <p>"Harga bersaing dan terpercaya"</p>
-          <h4>Siti</h4>
-        </div>
-        <div class="slide">
-          <p>"Bisa transaksi kapan saja, 24 jam"</p>
-          <h4>Joko</h4>
+        <div className="mt-3 flex items-center justify-between font-semibold">Total: <div>{currencyIDR(cartTotal)}</div></div>
+        <div className="mt-4 flex gap-2">
+          <button onClick={handleCheckout} className="flex-1 py-2 rounded-lg bg-emerald-600 text-white">Bayar & Proses</button>
+          <button onClick={() => setShowCheckout(false)} className="py-2 px-3 rounded-lg border">Batal</button>
         </div>
       </div>
     </div>
-  </div>
+  )}
 
-</body>
-</html>
+  <footer className="mt-12 py-8 text-center text-sm text-slate-500">© {new Date().getFullYear()} PulsaPro — Demo marketplace pulsa.</footer>
+</div>
+
+); }
+
+function AdminForm({ onAdd }) { const [id, setId] = useState(""); const [provider, setProvider] = useState(""); const [denom, setDenom] = useState(0); const [price, setPrice] = useState(0); const [stock, setStock] = useState(10); const [isToken, setIsToken] = useState(false);
+
+function submit(e) { e.preventDefault(); if (!id || !provider || denom <= 0 || price <= 0) return alert("Lengkapi data produk"); onAdd({ id, provider, denom: Number(denom), price: Number(price), stock: Number(stock), isToken }); setId(""); setProvider(""); setDenom(0); setPrice(0); setStock(10); setIsToken(false); }
+
+return ( <form onSubmit={submit} className="grid grid-cols-1 sm:grid-cols-2 gap-3"> <input value={id} onChange={e => setId(e.target.value)} placeholder="ID produk (unik)" className="py-2 px-3 rounded-lg border" /> <input value={provider} onChange={e => setProvider(e.target.value)} placeholder="Provider (contoh: Telkomsel)" className="py-2 px-3 rounded-lg border" /> <input value={denom} onChange={e => setDenom(e.target.value)} type="number" placeholder="Denom" className="py-2 px-3 rounded-lg border" /> <input value={price} onChange={e => setPrice(e.target.value)} type="number" placeholder="Harga jual (Rp)" className="py-2 px-3 rounded-lg border" /> <input value={stock} onChange={e => setStock(e.target.value)} type="number" placeholder="Stok" className="py-2 px-3 rounded-lg border" /> <label className="flex items-center gap-2"><input checked={isToken} onChange={e => setIsToken(e.target.checked)} type="checkbox" /> Token PLN?</label> <div className="sm:col-span-2 flex gap-2"> <button type="submit" className="py-2 px-3 bg-indigo-600 text-white rounded-lg">Tambah Produk</button> </div> </form> ); }
+
+function OrderList() { const [orders, setOrders] = useState(() => JSON.parse(localStorage.getItem("pm_orders") || "[]"));
+
+useEffect(() => { const h = () => setOrders(JSON.parse(localStorage.getItem("pm_orders") || "[]")); window.addEventListener("storage", h); return () => window.removeEventListener("storage", h); }, []);
+
+if (orders.length === 0) return <div className="text-sm text-slate-500">Belum ada pesanan.</div>;
+
+return ( <div className="space-y-3"> {orders.map(o => ( <div key={o.id} className="bg-white p-3 rounded-xl shadow-sm"> <div className="flex items-center justify-between"> <div> <div className="font-semibold">{o.id}</div> <div className="text-xs text-slate-500">{new Date(o.date).toLocaleString()}</div> </div> <div className="text-right"> <div className="font-semibold">{currencyIDR(o.total)}</div> <div className="text-xs text-slate-500">{o.phone}</div> </div> </div> </div> ))} </div> ); }
+
